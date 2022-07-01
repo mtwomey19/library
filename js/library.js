@@ -10,6 +10,11 @@ function Book(title, author, numPages, haveRead) {
     }
 }
 
+const book1 = new Book("The Monk and the Riddle", "Randy Komisar", 208, true);
+const book2 = new Book("Zero to One", "Peter Thiel", 224, false);
+const book3 = new Book("Natural Born Heroes", "Christopher McDougall", 352, false);
+myLibrary.push(book1, book2, book3);
+
 function goToNewBookPage() {
     const newBookBtn = document.getElementById('new-book-btn');
     if (newBookBtn === null) {

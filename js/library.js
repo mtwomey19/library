@@ -57,3 +57,36 @@ function getNewBookInfo(elementId) {
 submitButtonClicked();
 console.log(myLibrary);
 
+
+// Convert book data from myLibrary array into cards
+
+const bookCardContainer = document.getElementById('book-card-container');
+
+myLibrary.forEach(book => {
+    let bookCard = createBookCard();
+
+    for (const key in book) {
+        if (key === 'title') {
+            const rowTitle = addCellText('Title');
+            bookCard.appendChild(rowTitle);
+            const bookInfo = addCellText(book[key]);
+            bookCard.appendChild(bookInfo);
+        }
+    }
+});
+
+function createBookCard() {
+    const bookCard = document.createElement('div');
+    bookCard.classList.add('book-card');
+    bookCardContainer.appendChild(bookCard);
+    return bookCard;
+}
+
+// Consider adding class name as a paramter to this function
+function addCellText(cellText) {
+    const para = document.createElement('p');
+    const text = document.createTextNode(cellText);
+    para.appendChild(text);
+    return para;
+}
+

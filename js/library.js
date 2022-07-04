@@ -84,16 +84,16 @@ myLibrary.forEach(book => {
     cardCount++;
     for (const key in book) {
         if (key === 'title') {
-            createRow('Title', book[key], bookCard, 'title-text');
+            createRow('Title:', book[key], bookCard, 'title-text');
         }
         if (key === 'author') {
-            createRow('Author', book[key], bookCard, 'author-text');
+            createRow('Author:', book[key], bookCard, 'author-text');
         }
         if (key === 'numPages') {
-            createRow('No. Pages', book[key], bookCard, 'num-pages-text');
+            createRow('No. Pages:', book[key], bookCard, 'num-pages-text');
         }
         if (key === 'haveRead') {
-            createRow('Completed', book[key], bookCard, 'have-read-text');
+            createRow('Completed:', book[key], bookCard, 'have-read-text');
         }
     }
 });
@@ -114,11 +114,13 @@ function createBookCard(cardCount) {
         let card = localStorage.getItem(cardCount);
         card = JSON.parse(card);
         if (card.haveRead !== 'Yes') {
+            const checkboxDiv = createCheckBoxDiv();
             const haveReadCheckBox = createHaveReadCheckBox();
             haveReadCheckBox.setAttribute('id', `read-checkbox-${cardCount}`)
             const haveReadLabel = createHaveReadLabel();
-            btnDiv.appendChild(haveReadCheckBox);
-            btnDiv.appendChild(haveReadLabel);
+            checkboxDiv.appendChild(haveReadCheckBox);
+            checkboxDiv.appendChild(haveReadLabel);
+            btnDiv.appendChild(checkboxDiv);
         }
 
         bookCardContainer.appendChild(bookCard);
@@ -129,6 +131,7 @@ function createBookCard(cardCount) {
 function createRow(rowTitle, cellText, bookCard, className) {
     if (bookCardContainer !== null) {
         const rowTitleElement = document.createElement('p');
+        rowTitleElement.classList.add('row-title');
         const rowTitleText = document.createTextNode(rowTitle);
         rowTitleElement.appendChild(rowTitleText);
         bookCard.appendChild(rowTitleElement);
@@ -145,6 +148,12 @@ function createButtonDiv() {
     const btnDiv = document.createElement('div');
     btnDiv.classList.add('btn-div');
     return btnDiv;
+}
+
+function createCheckBoxDiv() {
+    const checkboxDiv = document.createElement('div');
+    checkboxDiv.classList.add('checkbox-div');
+    return checkboxDiv;
 }
 
 function createRemoveButton() {
@@ -187,7 +196,8 @@ function haveReadChecked() {
     if (haveReadBtns.length > 0) {
         haveReadBtns.forEach(checkbox => checkbox.addEventListener('change', () => {
             if (checkbox.checked) {
-                const btnDiv = checkbox.parentNode;
+                const checkboxDiv = checkbox.parentNode;
+                const btnDiv = checkboxDiv.parentNode;
                 const bookCard = btnDiv.parentNode;
                 const bookCardId = bookCard.id;
                 const haveReadElement = Array.from(bookCard.getElementsByClassName('have-read-text'))[0];

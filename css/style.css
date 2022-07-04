@@ -4,25 +4,81 @@
     box-sizing: border-box;
 }
 
+body, html {
+    height: 100%;
+    background-color: #e5e7eb;
+}
+
+body {
+    background-color: #e5e7eb;
+    color: #204254;
+}
+
 .header {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding-bottom: 15px;
+
+    background-color: #f3f4f6;
+
+    position: relative;
+    box-shadow: 0 4.5px 4.5px 0 #d1d5db;
+}
+
+.header h1 {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-size: 45px;
+}
+
+.header button {
+    all: unset;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 15px;
+    width: 152.49px;
+    padding: 9px;
+    border-radius: 9px;
+    border: 1.2px solid #204254;
+    color: #204254;
+}
+
+.header button:hover {
+    font-weight: bold;
+    border: 1.5px solid #204254;
+}
+
+.header button:active {
+    background-color: #204254;
+    color: #f3f4f6;
 }
 
 #book-card-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 24%));
     gap: 30px;
+    background-color: #e5e7eb;
+    padding: 30px;
+    justify-content: center;
 }
 
 .book-card {
     display: grid;
     grid-template-columns: 1fr 3fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 2fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    gap: 15px;
 
-    border: 1px solid black;
+    border-radius: 12px;
+
+    background-color: #f3f4f6;
+    border-left: 6px solid #B94A3E;
+
+    padding: 30px;
+    max-height: 270px;
+
+    box-shadow: 4.5px 4.5px 4.5px 0 #d1d5db;
 }
 
 .book-card-btns {
@@ -32,8 +88,51 @@
 }
 
 .btn-div {
-    grid-column: 2 / 3;
+    grid-column: 1 / 3;
     grid-row: 5 / 6;
 
+    align-self: end;
+
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-div button {
+    all: unset;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 15px;
+    padding: 6px 12px 6px 12px;
+    border-radius: 9px;
+    border: 1.2px solid #204254;
+    color: #204254;
+}
+
+.btn-div button:hover {
+    font-weight: bold;
+    border: 1.5px solid #204254;
+}
+
+.btn-div button:active {
+    background-color: #204254;
+    color: #f3f4f6;
+}
+
+
+.checkbox-div {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.row-title {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.title-text, .author-text,
+.num-pages-text, .have-read-text {
+    font-size: 15px;
+    font-style: italic;
 }

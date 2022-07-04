@@ -3,3 +3,96 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+body, html {
+    width: 100%;
+    color: #204254;
+    background-color: #e5e7eb
+}
+
+h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 30px 30px 30px;
+    font-size: 45px;
+
+    background-color: #f3f4f6;
+
+    position: relative;
+    box-shadow: 0 4.5px 4.5px 0 #d1d5db;
+}
+
+.new-book-form {
+    display: grid;
+    grid-template-columns: 300px 300px;
+    padding: 30px;
+    column-gap: 30px;
+    row-gap: 15px;
+    justify-content: center;
+}
+
+.input-pair {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}
+
+.input-pair label {
+    font-size: 18px;
+    font-weight: bold;
+
+}
+
+.input-pair input {
+    max-width: 300px;
+    border-radius: 9px;
+    padding: 6px 12px 6px 12px;
+    border: 1.2px solid #204254;
+    color: #204254;
+    background-color: #f3f4f6;
+}
+
+.input-pair input:focus {
+    outline: none;
+    border: 1.8px solid #204254;
+}
+
+.input-pair.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#have-read {
+    width: 15px;
+    transform: scale(1.2);
+    border: 1.2px solid #204254;
+}
+
+.form-btns {
+    display: flex;
+    gap: 30px;
+}
+
+.form-btns button {
+    all: unset;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 15px;
+    padding: 6px 12px 6px 12px;
+    border-radius: 9px;
+    border: 1.2px solid #204254;
+    color: #204254;
+    width: 75px;
+    background-color: #f3f4f6;
+}
+
+.form-btns button:hover {
+    font-weight: bold;
+    border: 1.5px solid #204254;
+}
+
+.form-btns button:active {
+    background-color: #204254;
+    color: #f3f4f6;
+}

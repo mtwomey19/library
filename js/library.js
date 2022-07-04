@@ -12,11 +12,6 @@ function Book(title, author, numPages, haveRead) {
     }
 }
 
-// const book1 = new Book("The Monk and the Riddle", "Randy Komisar", 208, true);
-// const book2 = new Book("Zero to One", "Peter Thiel", 224, false);
-// const book3 = new Book("Natural Born Heroes", "Christopher McDougall", 352, false);
-// myLibrary.push(book1, book2, book3);
-
 function goToNewBookPage() {
     const newBookBtn = document.getElementById('new-book-btn');
     if (newBookBtn !== null) {
@@ -57,8 +52,10 @@ function submitButtonClicked() {
 
 function getNewBookInfo(elementId) {
     const element = document.getElementById(elementId);
-    if (element.type === 'checkbox') {
-        return element.checked;
+    if (element.type === 'checkbox' && element.checked === true) {
+        return 'Yes';
+    } else if (element.type === 'checkbox' && element.checked === false) {
+        return 'Not yet';
     }
     return element.value;
 }
@@ -68,9 +65,8 @@ submitButtonClicked();
 function addNewBookToLibrary() {
     for (let i = 1; i <= localStorage.getItem('count'); i++) {
         let newBook = localStorage.getItem(i);
-        console.log(i);
-        newBook = JSON.parse(newBook);
         console.log(newBook);
+        newBook = JSON.parse(newBook);
         myLibrary.push(newBook);
     }
 }
@@ -88,16 +84,16 @@ myLibrary.forEach(book => {
     cardCount++;
     for (const key in book) {
         if (key === 'title') {
-            createRow('Title', book[key], bookCard);
+            createRow('Title', book[key], bookCard, 'title-text');
         }
         if (key === 'author') {
-            createRow('Author', book[key], bookCard);
+            createRow('Author', book[key], bookCard, 'author-text');
         }
         if (key === 'numPages') {
-            createRow('No. Pages', book[key], bookCard);
+            createRow('No. Pages', book[key], bookCard, 'num-pages-text');
         }
         if (key === 'haveRead') {
-            createRow('Completed', book[key], bookCard);
+            createRow('Completed', book[key], bookCard, 'have-read-text');
         }
     }
 });
@@ -115,14 +111,33 @@ function createBookCard(cardCount) {
         removeBtn.setAttribute('id', `remove-btn-${cardCount}`);
         btnDiv.appendChild(removeBtn);
 
-        const haveReadCheckBox = createHaveReadCheckBox();
-        haveReadCheckBox.setAttribute('id', `read-checkbox-${cardCount}`)
-        const haveReadLabel = createHaveReadLabel();
-        btnDiv.appendChild(haveReadCheckBox);
-        btnDiv.appendChild(haveReadLabel);
+        let card = localStorage.getItem(cardCount);
+        card = JSON.parse(card);
+        if (card.haveRead !== 'Yes') {
+            const haveReadCheckBox = createHaveReadCheckBox();
+            haveReadCheckBox.setAttribute('id', `read-checkbox-${cardCount}`)
+            const haveReadLabel = createHaveReadLabel();
+            btnDiv.appendChild(haveReadCheckBox);
+            btnDiv.appendChild(haveReadLabel);
+        }
 
         bookCardContainer.appendChild(bookCard);
         return bookCard;
+    }
+}
+
+function createRow(rowTitle, cellText, bookCard, className) {
+    if (bookCardContainer !== null) {
+        const rowTitleElement = document.createElement('p');
+        const rowTitleText = document.createTextNode(rowTitle);
+        rowTitleElement.appendChild(rowTitleText);
+        bookCard.appendChild(rowTitleElement);
+        
+        const bookInfoElement = document.createElement('p');
+        const bookInfoText = document.createTextNode(cellText);
+        bookInfoElement.classList.add(className);
+        bookInfoElement.appendChild(bookInfoText);
+        bookCard.appendChild(bookInfoElement);
     }
 }
 
@@ -142,7 +157,7 @@ function createRemoveButton() {
 function createHaveReadCheckBox() {
     const haveReadCheckBox = document.createElement('input')
     haveReadCheckBox.setAttribute('type', 'checkbox');
-    haveReadCheckBox.classList.add('have-read-toggle');
+    haveReadCheckBox.classList.add('have-read-checkbox');
     return haveReadCheckBox;
 }
 
@@ -150,20 +165,6 @@ function createHaveReadLabel() {
     const haveReadLabel = document.createElement('label')
     haveReadLabel.textContent = 'Finished reading?'
     return haveReadLabel;
-}
-
-function createRow(rowTitle, cellText, bookCard) {
-    if (bookCardContainer !== null) {
-        const rowTitleElement = document.createElement('p');
-        const rowTitleText = document.createTextNode(rowTitle);
-        rowTitleElement.appendChild(rowTitleText);
-        bookCard.appendChild(rowTitleElement);
-        
-        const bookInfoElement = document.createElement('p');
-        const bookInfoText = document.createTextNode(cellText);
-        bookInfoElement.appendChild(bookInfoText);
-        bookCard.appendChild(bookInfoElement);
-    }
 }
 
 function removeButtonClicked() {
@@ -180,4 +181,26 @@ function removeButtonClicked() {
         }));
     }
 }
+
+function haveReadChecked() {
+    let haveReadBtns = Array.from(document.getElementsByClassName('have-read-checkbox'));
+    if (haveReadBtns.length > 0) {
+        haveReadBtns.forEach(checkbox => checkbox.addEventListener('change', () => {
+            if (checkbox.checked) {
+                const btnDiv = checkbox.parentNode;
+                const bookCard = btnDiv.parentNode;
+                const bookCardId = bookCard.id;
+                const haveReadElement = Array.from(bookCard.getElementsByClassName('have-read-text'))[0];
+                haveReadElement.textContent = 'Yes';
+
+                let book = localStorage.getItem(bookCardId);
+                book = JSON.parse(book);
+                book.haveRead = 'Yes';
+                localStorage.setItem(bookCardId, JSON.stringify(book));
+            }
+        }));
+    }
+}
+
 removeButtonClicked();
+haveReadChecked();

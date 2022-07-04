@@ -12,10 +12,10 @@ function Book(title, author, numPages, haveRead) {
     }
 }
 
-const book1 = new Book("The Monk and the Riddle", "Randy Komisar", 208, true);
-const book2 = new Book("Zero to One", "Peter Thiel", 224, false);
-const book3 = new Book("Natural Born Heroes", "Christopher McDougall", 352, false);
-myLibrary.push(book1, book2, book3);
+// const book1 = new Book("The Monk and the Riddle", "Randy Komisar", 208, true);
+// const book2 = new Book("Zero to One", "Peter Thiel", 224, false);
+// const book3 = new Book("Natural Born Heroes", "Christopher McDougall", 352, false);
+// myLibrary.push(book1, book2, book3);
 
 function goToNewBookPage() {
     const newBookBtn = document.getElementById('new-book-btn');
@@ -67,8 +67,10 @@ submitButtonClicked();
 
 function addNewBookToLibrary() {
     for (let i = 1; i <= localStorage.getItem('count'); i++) {
-        let newBook = localStorage.getItem(localStorage.getItem('count'));
+        let newBook = localStorage.getItem(i);
+        console.log(i);
         newBook = JSON.parse(newBook);
+        console.log(newBook);
         myLibrary.push(newBook);
     }
 }
@@ -105,9 +107,49 @@ function createBookCard(cardCount) {
         const bookCard = document.createElement('div');
         bookCard.classList.add('book-card');
         bookCard.setAttribute('id', cardCount);
+
+        const btnDiv = createButtonDiv();
+        bookCard.appendChild(btnDiv);
+
+        const removeBtn = createRemoveButton();
+        removeBtn.setAttribute('id', `remove-btn-${cardCount}`);
+        btnDiv.appendChild(removeBtn);
+
+        const haveReadCheckBox = createHaveReadCheckBox();
+        haveReadCheckBox.setAttribute('id', `read-checkbox-${cardCount}`)
+        const haveReadLabel = createHaveReadLabel();
+        btnDiv.appendChild(haveReadCheckBox);
+        btnDiv.appendChild(haveReadLabel);
+
         bookCardContainer.appendChild(bookCard);
         return bookCard;
     }
+}
+
+function createButtonDiv() {
+    const btnDiv = document.createElement('div');
+    btnDiv.classList.add('btn-div');
+    return btnDiv;
+}
+
+function createRemoveButton() {
+    const removeBtn = document.createElement('button');
+    removeBtn.textContent = 'Remove';
+    removeBtn.classList.add('remove-btn');
+    return removeBtn;
+}
+
+function createHaveReadCheckBox() {
+    const haveReadCheckBox = document.createElement('input')
+    haveReadCheckBox.setAttribute('type', 'checkbox');
+    haveReadCheckBox.classList.add('have-read-toggle');
+    return haveReadCheckBox;
+}
+
+function createHaveReadLabel() {
+    const haveReadLabel = document.createElement('label')
+    haveReadLabel.textContent = 'Finished reading?'
+    return haveReadLabel;
 }
 
 function createRow(rowTitle, cellText, bookCard) {
@@ -123,3 +165,19 @@ function createRow(rowTitle, cellText, bookCard) {
         bookCard.appendChild(bookInfoElement);
     }
 }
+
+function removeButtonClicked() {
+    let removeBtns = Array.from(document.getElementsByClassName('remove-btn'));
+    if (removeBtns.length > 0) {
+        removeBtns.forEach(button => button.addEventListener('click', () => {
+            const btnDiv = button.parentNode
+            const bookCard = btnDiv.parentNode;
+            const bookCardId = bookCard.id;
+            localStorage.removeItem(bookCardId);
+            bookCard.remove();
+            cardCount -= 1;
+            localStorage.setItem('count', localStorage.getItem('count') - 1);
+        }));
+    }
+}
+removeButtonClicked();

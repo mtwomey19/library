@@ -1,5 +1,3 @@
-let myLibrary = [];
-let newBooks = [];
 // localStorage.clear();
 
 function Book(title, author, numPages, haveRead) {
@@ -42,12 +40,21 @@ function submitButtonClicked() {
             const author = getNewBookInfo('author');
             const numPages = getNewBookInfo('num-pages');
             const haveRead = getNewBookInfo('have-read');
-            
             const newBook = new Book(title, author, numPages, haveRead);
-            localStorage.setItem('count', +localStorage.getItem('count') + +1);
-            localStorage.setItem(localStorage.getItem('count'), JSON.stringify(newBook));
+
+            localStorage.setItem(getNewIndex(), JSON.stringify(newBook));
         });
     }
+}
+
+function getNewIndex() {
+    let highKey = 0;
+    for (let i = 0; i < localStorage.length; i++) {
+        if(+localStorage.key(i) >= highKey) {
+            highKey = +localStorage.key(i) + +1;
+        }
+    }
+    return highKey;
 }
 
 function getNewBookInfo(elementId) {
@@ -62,41 +69,31 @@ function getNewBookInfo(elementId) {
 
 submitButtonClicked();
 
-function addNewBookToLibrary() {
-    for (let i = 1; i <= localStorage.getItem('count'); i++) {
-        let newBook = localStorage.getItem(i);
-        console.log(newBook);
-        newBook = JSON.parse(newBook);
-        myLibrary.push(newBook);
-    }
-}
-
-addNewBookToLibrary();
-console.log(myLibrary);
-
 // Convert book data from myLibrary array into cards
 
 const bookCardContainer = document.getElementById('book-card-container');
-let cardCount = 1;
-
-myLibrary.forEach(book => {
-    let bookCard = createBookCard(cardCount);
-    cardCount++;
-    for (const key in book) {
-        if (key === 'title') {
-            createRow('Title:', book[key], bookCard, 'title-text');
-        }
-        if (key === 'author') {
-            createRow('Author:', book[key], bookCard, 'author-text');
-        }
-        if (key === 'numPages') {
-            createRow('No. Pages:', book[key], bookCard, 'num-pages-text');
-        }
-        if (key === 'haveRead') {
-            createRow('Completed:', book[key], bookCard, 'have-read-text');
+for (let i = 0; i < localStorage.length; i++) {
+    if (i !== null) {
+        let id = localStorage.key(i);
+        let bookCard = createBookCard(id);
+        let bookInfo = localStorage.getItem(id);
+        const bookObj = JSON.parse(bookInfo);
+        for (const key in bookObj){
+            if (key === 'title') {
+                createRow('Title:', bookObj[key], bookCard, 'title-text');
+            }
+            if (key === 'author') {
+                createRow('Author:', bookObj[key], bookCard, 'author-text');
+            }
+            if (key === 'numPages') {
+                createRow('No. Pages:', bookObj[key], bookCard, 'num-pages-text');
+            }
+            if (key === 'haveRead') {
+                createRow('Completed:', bookObj[key], bookCard, 'have-read-text');
+            }
         }
     }
-});
+}
 
 function createBookCard(cardCount) {
     if (bookCardContainer !== null) {
@@ -112,8 +109,7 @@ function createBookCard(cardCount) {
         btnDiv.appendChild(removeBtn);
 
         let card = localStorage.getItem(cardCount);
-        card = JSON.parse(card);
-        if (card.haveRead !== 'Yes') {
+        if (bookCard !== null && JSON.parse(card).haveRead !== 'Yes') {
             const checkboxDiv = createCheckBoxDiv();
             const haveReadCheckBox = createHaveReadCheckBox();
             haveReadCheckBox.setAttribute('id', `read-checkbox-${cardCount}`)
@@ -185,8 +181,6 @@ function removeButtonClicked() {
             const bookCardId = bookCard.id;
             localStorage.removeItem(bookCardId);
             bookCard.remove();
-            cardCount -= 1;
-            localStorage.setItem('count', localStorage.getItem('count') - 1);
         }));
     }
 }
